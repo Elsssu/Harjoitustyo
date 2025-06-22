@@ -225,7 +225,7 @@ public class BattleFieldFragment extends Fragment {
                                 }
                                 Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterA.getId()));
                                 Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterB.getId()));
-                                battleTextView.append("Both fighters were brought home to heal.\n");
+                                battleTextView.append("Both fighters were brought home to heal.\n The battle is over!\n");
                                 fighterA = null;
                                 fighterB = null;
                                 updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage, fighterB, fighterBNameText, fighterBText, fighterBImage);
