@@ -7,7 +7,7 @@ import java.util.Collection;
 public class TrainingArea extends LutemonLocation implements Serializable {
 
     private int trainCounter = 0;
-    private static final int trainThreshold = 1;
+    private static final int trainThreshold = 30;
     public TrainingArea() {
         super("TrainingArea");
     }

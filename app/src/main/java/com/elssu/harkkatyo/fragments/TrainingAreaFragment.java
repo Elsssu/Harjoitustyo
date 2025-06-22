@@ -19,6 +19,8 @@ import com.elssu.harkkatyo.R;
 import com.elssu.harkkatyo.Storage;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.w3c.dom.Text;
+
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -44,7 +46,7 @@ public class TrainingAreaFragment extends Fragment {
 
         TextView trainingLutemonName = view.findViewById(R.id.lutemonTrainingName);
         TextView experienceText = view.findViewById(R.id.ExperienceText);
-
+        TextView timesTrainingText = view.findViewById(R.id.TimesTrainingText);
         Collection<Lutemon> lutemons = Storage.getInstance().getTrainingArea().listLutemons();
 
         Button moveHomeButton = view.findViewById(R.id.MoveHomeButton);
@@ -53,7 +55,7 @@ public class TrainingAreaFragment extends Fragment {
         ProgressBar progressBar = view.findViewById(R.id.ProgressBar);
 
 
-        updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText);
+        updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText, timesTrainingText);
 
         trainingButton.setOnClickListener(i ->{
             if (!lutemons.isEmpty()) {
@@ -63,7 +65,7 @@ public class TrainingAreaFragment extends Fragment {
                 progressBar.setMax(barMax); // set max value
                 progressBar.setProgress(barCounter);
             }
-            updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText);
+            updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText, timesTrainingText);
         });
 
 
@@ -87,13 +89,12 @@ public class TrainingAreaFragment extends Fragment {
                 if (!lutemons.isEmpty()) {
                     Lutemon lutemon = lutemons.iterator().next();
 
-
                     Storage.getInstance().getHome().addLutemon(Storage.getInstance().getTrainingArea().getLutemon(lutemon.getId()));
 
 
 
                 }
-                updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText);
+                updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText, timesTrainingText);
             }
         });
         return view;
@@ -112,14 +113,17 @@ public class TrainingAreaFragment extends Fragment {
             ImageView trainingLutemonImage= view.findViewById(R.id.trainingLutemonImage);
             TextView trainingLutemonName = view.findViewById(R.id.lutemonTrainingName);
             TextView experienceText = view.findViewById(R.id.ExperienceText);
-            updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText);
+            TextView timesTrainingText = view.findViewById(R.id.TimesTrainingText);
+            updateTrainingAreaVisuals(trainingLutemonName, trainingLutemonImage, experienceText, timesTrainingText);
         }
     }
-    private void updateTrainingAreaVisuals(TextView nameView, ImageView imageView, TextView textView) {
+    private void updateTrainingAreaVisuals(TextView nameView, ImageView imageView, TextView experienceText, TextView timesTrainingText) {
         Collection<Lutemon> lutemons = Storage.getInstance().getTrainingArea().listLutemons();
         if (lutemons.isEmpty()) {
             nameView.setText("Nobody here :/");
             imageView.setImageDrawable(null);
+            experienceText.setText("");
+            timesTrainingText.setText("");
         } else {
             Lutemon lutemon = lutemons.iterator().next();
             nameView.setText(lutemon.getName() + " (" + lutemon.getColor() + ")");
@@ -140,7 +144,8 @@ public class TrainingAreaFragment extends Fragment {
                     imageView.setImageResource(R.drawable.pinklutemon);
                     break;
             }
-            textView.setText("Experience: " + lutemon.getExperience());
+            experienceText.setText("Experience: " + lutemon.getExperience());
+            timesTrainingText.setText("Times trained:\n   " + lutemon.getTimesTraining());
         }
     }
 }

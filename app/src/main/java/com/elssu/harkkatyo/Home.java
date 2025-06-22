@@ -15,6 +15,9 @@ public class Home extends LutemonLocation {
         lutemon.setHealth(lutemon.getMaxHealth());
 
     }
+    public void removeLutemon(int id) {
+        lutemons.remove(id);
+    }
 
 
 

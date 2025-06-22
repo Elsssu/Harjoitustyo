@@ -76,6 +76,7 @@ public class LutemonListAdapter extends RecyclerView.Adapter<LutemonViewHolder> 
                         break;
                     case 3:
                         Storage.getInstance().getHome().getLutemon(lutemonId);
+                        Storage.getInstance().removeLutemon(lutemonId);
                         break;
                     case 0:
                         return;

@@ -53,12 +53,16 @@ public class Storage {
         try (ObjectOutputStream oos = new ObjectOutputStream(
                 context.openFileOutput(filename, Context.MODE_PRIVATE))) {
             oos.writeObject(lutemons);
-            Toast .makeText(context, "Lutemons saved successfully", Toast.LENGTH_SHORT).show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Toast.makeText(context, "Lutemons saved successfully", Toast.LENGTH_SHORT).show();
     }
 
+    public void removeLutemon(int id) {
+        lutemons.remove(id);
+    }
     public void loadLutemonsFromFile(Context context, String filename) {
         Toast.makeText(context, "Loading Lutemons...", Toast.LENGTH_SHORT).show();
         try (ObjectInputStream ois = new ObjectInputStream(context.openFileInput(filename))) {

@@ -18,6 +18,8 @@ public abstract class Lutemon implements Serializable {
     protected String color;
     protected int  timesTraining;
 
+
+
     public Lutemon(String name, int attack, int defense, int maxHealth, String color){
         this.id = idCounter++;
         this.name = name;
@@ -52,12 +54,18 @@ public abstract class Lutemon implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        int maxLength = 10;
+        if (name.length() > maxLength) {
+            this.name = name.substring(0, maxLength);
+        } else {
+            this.name = name;
+        }
     }
 
     public void addLoss() {
         losses++;
     }
+    public int getTimesTraining() {return timesTraining;}
 
     public void addWin() {
         wins++;
@@ -102,4 +110,5 @@ public abstract class Lutemon implements Serializable {
     public int getWins() {
         return wins;
     }
+
 }

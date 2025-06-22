@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import com.elssu.harkkatyo.Lutemon;
 import com.elssu.harkkatyo.R;
@@ -29,6 +30,7 @@ public class BattleFieldFragment extends Fragment {
         TextView fighterAText = view.findViewById(R.id.FighterAText);
         TextView fighterBText = view.findViewById(R.id.FighterBText);
         TextView battleTextView = view.findViewById(R.id.BattleTextView);
+        ScrollView battleScrollView = view.findViewById(R.id.BattleText);
         TextView fighterANameText = view.findViewById(R.id.FighterANameText);
         TextView fighterBNameText = view.findViewById(R.id.FighterBNameText);
         ImageView fighterAImage = view.findViewById(R.id.FighterAImage);
@@ -204,6 +206,7 @@ public class BattleFieldFragment extends Fragment {
                                 fighterB, fighterBNameText, fighterBText, fighterBImage, localB[0], fighterB.getMaxHealth()
                         );
                         battleTextView.append(displayText);
+                        battleScrollView.post(() -> battleScrollView.fullScroll(View.FOCUS_DOWN));
 
                         handler.postDelayed(() -> {
                             SwordAtoB.setVisibility(View.GONE);
