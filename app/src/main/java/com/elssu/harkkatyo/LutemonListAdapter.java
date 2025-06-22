@@ -83,7 +83,7 @@ public class LutemonListAdapter extends RecyclerView.Adapter<LutemonViewHolder> 
                 }
                 lutemons.clear();
                 lutemons.addAll(Storage.getInstance().getHome().listLutemons());
-                showButtons = true; // <-- should be true, not false
+                showButtons = true;
                 notifyDataSetChanged();
             }
         });

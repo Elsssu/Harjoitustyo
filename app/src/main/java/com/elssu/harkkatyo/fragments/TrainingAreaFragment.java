@@ -19,7 +19,6 @@ import com.elssu.harkkatyo.R;
 import com.elssu.harkkatyo.Storage;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import org.w3c.dom.Text;
 
 import java.util.Collection;
 import java.util.Iterator;

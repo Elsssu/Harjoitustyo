@@ -28,8 +28,8 @@ public class StatisticsSaveLoad extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics_save_load, container, false);
 
-        Button saveButton = view.findViewById(R.id.SaveGameButton); // Save button
-        Button loadButton = view.findViewById(R.id.LoadGameButton); // Load button
+        Button saveButton = view.findViewById(R.id.SaveGameButton);
+        Button loadButton = view.findViewById(R.id.LoadGameButton);
 
         saveButton.setOnClickListener(v -> {
             Storage.getInstance().saveLutemonsToFile(requireContext(), "lutemons.dat");

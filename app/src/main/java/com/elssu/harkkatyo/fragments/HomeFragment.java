@@ -54,8 +54,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view,
                   @Nullable Bundle savedInstanceState){
-    //Implementing recyclerview in fragment
-    //Source: https://www.geeksforgeeks.org/how-to-implement-recylerview-in-a-fragment-in-android/
+
 
         super.onViewCreated(view, savedInstanceState);
 
@@ -87,7 +86,7 @@ public class HomeFragment extends Fragment {
         lutemons = new ArrayList<>(Storage.getInstance().getHome().listLutemons());
         lutemonListAdapter = new LutemonListAdapter(lutemons);
 
-        //Tekoäly Copilot helped me make this pop-up menu below
+
         lutemonsCreateMenuButton.setOnClickListener(v -> {
             BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
             dialog.setContentView(R.layout.menu_popup);
@@ -101,9 +100,9 @@ public class HomeFragment extends Fragment {
             ImageView imageLutemon = dialog.findViewById(R.id.imgLutemonType);
 
 
-            //I made this radiobutton change listener with the help of copilot
+
             typeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                //Displaying stats for selected lutemon radiobutton
+
                 String stats = "";
                 String statNameString = "";
                 int drawableRes = 0;

@@ -78,9 +78,9 @@ public class BattleFieldFragment extends Fragment {
                 List<String> fightResults = new ArrayList<>();
                 List<Runnable> visuals = new ArrayList<>();
 
-                // Simulate the fight and collect results
+
                 while (localHealthA > 0 && localHealthB > 0) {
-                    // Fighter A attacks B
+
                     int attackValueA = fighterA.getAttack() + fighterA.getExperience() / 2;
                     boolean missA = Math.random() < 0.2;
                     boolean critA = !missA && Math.random() < 0.45;
@@ -114,7 +114,7 @@ public class BattleFieldFragment extends Fragment {
                         }
                     }
 
-                    // Fighter B attacks A
+
                     int attackValueB = fighterB.getAttack() + fighterB.getExperience() / 2;
                     boolean missB = Math.random() < 0.2;
                     boolean critB = !missB && Math.random() < 0.45;
@@ -152,7 +152,7 @@ public class BattleFieldFragment extends Fragment {
                 battleTextView.setText("");
                 int[] localA = {fighterA.getHealth()};
                 int[] localB = {fighterB.getHealth()};
-                int[] turn = {0}; // 0: A's turn, 1: B's turn
+                int[] turn = {0};
 
                 for (int i = 0; i < fightResults.size(); i++) {
                     final int idx = i;
@@ -270,7 +270,7 @@ public class BattleFieldFragment extends Fragment {
             ImageView fighterBImage = view.findViewById(R.id.FighterBImage);
             TextView battleTextView = view.findViewById(R.id.BattleTextView);
 
-            // Clear the battle text
+
             battleTextView.setText("");
 
             updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage,

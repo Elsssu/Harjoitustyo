@@ -21,7 +21,7 @@ public class BattleField extends LutemonLocation {
         Lutemon fighterB = iterator.next();
         List<String> result = new ArrayList<>();
         while (fighterA.getHealth() > 0 && fighterB.getHealth() > 0) {
-            // Fighter A attacks B
+
             int crit = 0;
             int attackValue = fighterA.getAttack() + fighterA.getExperience() / 2;
             if (missRoll()) {
@@ -41,7 +41,7 @@ public class BattleField extends LutemonLocation {
                 }
             }
 
-            // Fighter B attacks A
+
             crit = 0;
             attackValue = fighterB.getAttack() + fighterB.getExperience() / 2;
             if (missRoll()) {
@@ -64,12 +64,10 @@ public class BattleField extends LutemonLocation {
         return result;
     }
     public boolean criticalHitRoll() {
-        //get a true or false for critical hit with 45% chance to be true
         return Math.random() < 0.45;
     }
 
     public boolean missRoll() {
-        //get a true or false for missing attack with 20% chance to be true
         return Math.random() < 0.2;
     }
 

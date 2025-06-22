@@ -1,7 +1,5 @@
 package com.elssu.harkkatyo;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 public abstract class Lutemon implements Serializable {
