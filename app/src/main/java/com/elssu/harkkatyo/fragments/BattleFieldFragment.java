@@ -94,18 +94,22 @@ public class BattleFieldFragment extends Fragment {
             fighterANameText.setText("");
             fighterAImage.setImageDrawable(null);
         } else {
-            fighterANameText.setText(fighterA.getName() + " (" + fighterA.getColor() + ")");
-            fighterAText.setText("Attack:             " + fighterA.getAttack() + "\n" +
+            String ANameText = fighterA.getName() + " (" + fighterA.getColor() + ")";
+            String AText = "Attack:             " + fighterA.getAttack() + "\n" +
                     "Defense:          " + fighterA.getDefense() + "\n" +
-                    "HP:           " +fighterA.getHealth() + "/" + fighterA.getMaxHealth());
+                    "HP:           " +fighterA.getHealth() + "/" + fighterA.getMaxHealth();
+            fighterANameText.setText(ANameText);
+            fighterAText.setText(AText);
             setLutemonImage(fighterA, fighterAImage);
         }
 
         if (fighterB != null) {
-            fighterBNameText.setText(fighterB.getName() + " (" + fighterB.getColor() + ")");
-            fighterBText.setText("Attack:             " + fighterB.getAttack() + "\n" +
+            String BNameText = fighterB.getName() + " (" + fighterB.getColor() + ")";
+            String BText = "Attack:             " + fighterB.getAttack() + "\n" +
                     "Defense:          " + fighterB.getDefense() + "\n" +
-                    "HP:           " +fighterB.getHealth() + "/" + fighterB.getMaxHealth());
+                    "HP:           " +fighterB.getHealth() + "/" + fighterB.getMaxHealth();
+            fighterBNameText.setText(BNameText);
+            fighterBText.setText(BText);
             setLutemonImage(fighterB, fighterBImage);
         } else {
             fighterBText.setText("Nobody here :/");
