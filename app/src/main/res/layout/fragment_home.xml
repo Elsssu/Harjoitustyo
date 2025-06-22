@@ -56,25 +56,6 @@
             app:layout_constraintStart_toEndOf="@+id/LutemonsCreateMenuButton"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="685dp" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvLutemonList"
-            app:layout_constraintVertical_bias="1.0"
-            tools:layout_editor_absoluteX="334dp" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

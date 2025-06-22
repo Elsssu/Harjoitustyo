@@ -1,6 +1,6 @@
 package com.elssu.harkkatyo.fragments;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +24,7 @@ import com.elssu.harkkatyo.Black;
 import com.elssu.harkkatyo.Green;
 import com.elssu.harkkatyo.Lutemon;
 import com.elssu.harkkatyo.LutemonListAdapter;
-import com.elssu.harkkatyo.LutemonLocation;
-import com.elssu.harkkatyo.MainActivity;
+
 import com.elssu.harkkatyo.Orange;
 import com.elssu.harkkatyo.Pink;
 import com.elssu.harkkatyo.R;
@@ -80,7 +79,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
         view.setBackgroundResource(R.drawable.home_bg);
         Button lutemonsCreateMenuButton = view.findViewById(R.id.LutemonsCreateMenuButton);
@@ -88,7 +87,7 @@ public class HomeFragment extends Fragment {
         lutemons = new ArrayList<>(Storage.getInstance().getHome().listLutemons());
         lutemonListAdapter = new LutemonListAdapter(lutemons);
 
-        //AI Copilot helped me make this pop-up menu below
+        //Tekoäly Copilot helped me make this pop-up menu below
         lutemonsCreateMenuButton.setOnClickListener(v -> {
             BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
             dialog.setContentView(R.layout.menu_popup);
@@ -145,11 +144,11 @@ public class HomeFragment extends Fragment {
                     drawableRes = R.drawable.pinklutemon;
                 }
 
-                // update text
+
                 statName.setText(statNameString);
                 statText.setText(stats);
 
-                // show & set image
+
                 imageLutemon.setVisibility(View.VISIBLE);
                 if (drawableRes != 0) {
                     imageLutemon.setImageResource(drawableRes);
@@ -171,14 +170,14 @@ public class HomeFragment extends Fragment {
                 }
 
                 boolean nameExists = false;
-                // Check Home
+
                 for (Lutemon l : Storage.getInstance().getHome().listLutemons()) {
                     if (l.getName().equalsIgnoreCase(enteredName)) {
                         nameExists = true;
                         break;
                     }
                 }
-                // Check TrainingArea
+
                 if (!nameExists) {
                     for (Lutemon l : Storage.getInstance().getTrainingArea().listLutemons()) {
                         if (l.getName().equalsIgnoreCase(enteredName)) {
@@ -187,7 +186,7 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 }
-                // Check BattleField
+
                 if (!nameExists) {
                     for (Lutemon l : Storage.getInstance().getBattleField().listLutemons()) {
                         if (l.getName().equalsIgnoreCase(enteredName)) {

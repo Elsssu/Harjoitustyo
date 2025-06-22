@@ -2,11 +2,9 @@ package com.elssu.harkkatyo.fragments;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +87,7 @@ public class TrainingAreaFragment extends Fragment {
                 if (!lutemons.isEmpty()) {
                     Lutemon lutemon = lutemons.iterator().next();
 
-                    // Remove from Training Area and add to Home
+
                     Storage.getInstance().getHome().addLutemon(Storage.getInstance().getTrainingArea().getLutemon(lutemon.getId()));
 
 
@@ -104,7 +102,7 @@ public class TrainingAreaFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Refresh Lutemons and update UI
+
         Iterator<Lutemon> battlefieldLutemons = Storage.getInstance().getBattleField().listLutemons().iterator();
         Lutemon fighterA = battlefieldLutemons.hasNext() ? battlefieldLutemons.next() : null;
         Lutemon fighterB = battlefieldLutemons.hasNext() ? battlefieldLutemons.next() : null;
@@ -121,7 +119,7 @@ public class TrainingAreaFragment extends Fragment {
         Collection<Lutemon> lutemons = Storage.getInstance().getTrainingArea().listLutemons();
         if (lutemons.isEmpty()) {
             nameView.setText("Nobody here :/");
-            imageView.setImageDrawable(null); // or set a default/empty image
+            imageView.setImageDrawable(null);
         } else {
             Lutemon lutemon = lutemons.iterator().next();
             nameView.setText(lutemon.getName() + " (" + lutemon.getColor() + ")");

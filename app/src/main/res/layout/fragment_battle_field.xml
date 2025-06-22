@@ -203,8 +203,8 @@
 
         <Button
             android:id="@+id/FightStartButton"
-            android:layout_width="226dp"
-            android:layout_height="63dp"
+            android:layout_width="188dp"
+            android:layout_height="60dp"
             android:text="Fight!"
             app:layout_constraintBottom_toTopOf="@+id/ExperienceText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -212,9 +212,9 @@
 
         <Button
             android:id="@+id/MoveHomeFromBattleButton"
-            android:layout_width="96dp"
-            android:layout_height="101dp"
-            android:text="Move\nto\nhome"
+            android:layout_width="108dp"
+            android:layout_height="90dp"
+            android:text="Move\nlutemons\nhome"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.012"

@@ -2,7 +2,9 @@ package com.elssu.harkkatyo;
 
 import android.util.Log;
 
-public abstract class Lutemon {
+import java.io.Serializable;
+
+public abstract class Lutemon implements Serializable {
     private static int idCounter = 1;
     protected String name;
     protected int health;
@@ -31,9 +33,7 @@ public abstract class Lutemon {
 
     }
 
-    public int getNumberOfCreatedLutemons(){
-        return idCounter;
-    }
+
     public void defense(int dmg){
         health = health-(dmg-defense);
         if(health < 0 ) {
@@ -49,9 +49,6 @@ public abstract class Lutemon {
     }
     public void addTimesTraining(int timesTraining) {
         this.timesTraining += timesTraining;
-    }
-    public void setIdCounter(int newIdCounter){
-        idCounter = newIdCounter;
     }
 
     public void setName(String name) {

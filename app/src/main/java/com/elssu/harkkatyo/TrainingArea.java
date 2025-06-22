@@ -2,12 +2,12 @@ package com.elssu.harkkatyo;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
+
 
 public class TrainingArea extends LutemonLocation implements Serializable {
 
     private int trainCounter = 0;
-    private static final int trainThreshold = 1;
+    private static final int trainThreshold = 30;
     public TrainingArea() {
         super("TrainingArea");
     }

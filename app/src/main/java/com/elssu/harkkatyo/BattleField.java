@@ -10,10 +10,7 @@ import java.util.List;
 
 public class BattleField extends LutemonLocation {
 
-    public interface FightListener {
-        void onFightUpdate(String message);
-        void onFightEnd(String result);
-    }
+
     public BattleField() {
         super("BattleField");
     }
@@ -31,7 +28,7 @@ public class BattleField extends LutemonLocation {
                 result.add(fighterA.getName() + " missed the attack!\n");
             } else {
                 if (criticalHitRoll()) {
-                    crit = 3;
+                    crit = 2;
                     attackValue += crit;
                     result.add(fighterA.getName() + " landed a critical hit, dealing " + (attackValue - fighterB.getDefense()) + " damage to " + fighterB.getName() + "!\n");
                 } else {
@@ -51,7 +48,7 @@ public class BattleField extends LutemonLocation {
                 result.add(fighterB.getName() + " missed the attack!\n");
             } else {
                 if (criticalHitRoll()) {
-                    crit = 3;
+                    crit = 2;
                     attackValue += crit;
                     result.add(fighterB.getName() + " landed a critical hit, dealing " + (attackValue - fighterA.getDefense()) + " damage to " + fighterA.getName() + "!\n");
                 } else {
@@ -67,13 +64,13 @@ public class BattleField extends LutemonLocation {
         return result;
     }
     public boolean criticalHitRoll() {
-        //get a true or false for critical hit with 10% chance to be true
-        return Math.random() < 0.1;
+        //get a true or false for critical hit with 45% chance to be true
+        return Math.random() < 0.45;
     }
 
     public boolean missRoll() {
-        //get a true or false for missing attack with 5% chance to be true
-        return Math.random() < 0.05;
+        //get a true or false for missing attack with 20% chance to be true
+        return Math.random() < 0.2;
     }
 
 

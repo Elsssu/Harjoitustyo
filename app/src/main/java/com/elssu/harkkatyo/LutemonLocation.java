@@ -1,6 +1,5 @@
 package com.elssu.harkkatyo;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -14,7 +13,8 @@ public abstract class LutemonLocation {
     }
 
     public void addLutemon(Lutemon lutemon){
-            lutemons.put(lutemon.getId(), lutemon);
+        lutemons.put(lutemon.getId(), lutemon);
+        Storage.getInstance().addLutemon(lutemon);
     }
     public Lutemon getLutemon(int id){
         Lutemon movingLutemon = lutemons.get(id);

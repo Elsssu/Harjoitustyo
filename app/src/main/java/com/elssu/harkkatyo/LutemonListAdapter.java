@@ -1,15 +1,10 @@
 package com.elssu.harkkatyo;
 
-import android.content.Context;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioGroup;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,7 +61,7 @@ public class LutemonListAdapter extends RecyclerView.Adapter<LutemonViewHolder> 
 
             @Override
             public void onClick(View v) {
-                //get chosen lutemon and set all select buttons to GONE
+
 
                  int pos = holder.getAdapterPosition();
                  Lutemon selectedLutemon = lutemons.get(pos);
