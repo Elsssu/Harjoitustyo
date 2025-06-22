@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class TrainingArea extends LutemonLocation {
 
     private int trainCounter = 0;
-    private static final int trainThreshold = 20;
+    private static final int trainThreshold = 30;
     public TrainingArea() {
         super("TrainingArea");
     }

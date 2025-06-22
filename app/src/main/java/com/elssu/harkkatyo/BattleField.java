@@ -1,8 +1,12 @@
 package com.elssu.harkkatyo;
 
+import android.util.Log;
+
 import com.elssu.harkkatyo.fragments.BattleFieldFragment;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class BattleField extends LutemonLocation {
 
@@ -14,26 +18,29 @@ public class BattleField extends LutemonLocation {
         super("BattleField");
     }
 
-    public void fight(FightListener listener) {
+    public List<String> fight(String results) {
         Iterator<Lutemon> iterator = lutemons.values().iterator();
         Lutemon fighterA = iterator.next();
         Lutemon fighterB = iterator.next();
-        String listenerInfoA = "";
-        String listenerInfoB = "";
+        List<String> result = new ArrayList<>();
         while ( fighterA.getHealth() > 0 && fighterB.getHealth() > 0) {
             int crit = 0;
-            String listenerInfo = "";
             //Check if attack misses or is a critical hit
             //If attack hits then A attack B with possible added critical hit damage
+            int dmgtaken = fighterB.getDefense() - fighterA.attack + crit + fighterA.experience / 2;
             if(missRoll()) {
-                //MIss
+                result.add(fighterA.getName() + " missed the attack!\n");
             }else {
                 if (criticalHitRoll()) {
                     crit = 3;
+                    fighterB.defense(fighterA.attack + crit + fighterA.experience / 2);
+                    result.add(fighterA.getName() + " landed a critical hit, dealing " + (dmgtaken + crit) + " damage to " + fighterB.getName() + "!\n");
 
 
+                }else {
+                    fighterB.defense(fighterA.attack + crit + fighterA.experience / 2);
+                    result.add(fighterA.getName() + " attacked " + fighterB.getName() + " for " + dmgtaken + " damage!\n");
                 }
-                fighterB.defense(fighterA.attack + crit + fighterA.experience/2);
                 //check if fighterB is able to fight
                 if (fighterB.getId() <= 0) {
 
@@ -41,31 +48,33 @@ public class BattleField extends LutemonLocation {
                 }
             }
             crit = 0;
-            if(missRoll()) {
+            dmgtaken = fighterA.getDefense() - fighterB.attack + crit + fighterB.experience / 2;
 
+            if(missRoll()) {
+                result.add(fighterB.getName() + " missed the attack!\n");
             }else {
                 if (criticalHitRoll()) {
                     crit = 3;
+                    fighterA.defense(fighterB.attack + crit + fighterB.experience / 2);
+                    result.add(fighterB.getName() + " landed a critical hit, dealing " + (dmgtaken + crit) + " damage to " + fighterA.getName() + "!\n");
+
+                }else {
+                    fighterA.defense(fighterB.attack + crit + fighterA.experience / 2);
+                    result.add(fighterB.getName() + " landed a critical hit, dealing " + (dmgtaken + crit) + " damage to " + fighterA.getName() + "!\n");
+
+                    fighterA.defense(fighterB.attack + crit + fighterB.experience / 2);
                 }
-                fighterA.defense(fighterB.attack + crit + fighterB.experience/2);
                 //check if fighterB is able to fight
                 if (fighterA.getId() <= 0) {
+                    result.add(fighterA.getName() + " has been defeated!\n");
                     break;
                 }
             }
-
-        }
-        if (fighterA.getHealth() <= 0) {
-            //Moving unconscious fighter A to home
-            Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterA.getId()));
-            fighterB.addExperience(2);
-        } else if (fighterB.getHealth() <= 0) {
-            //Moving unconscious fighter B to home
-            Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterB.getId()));
-            fighterA.addExperience(2);
+            fighterA.setHealth(fighterA.getMaxHealth());
+            fighterB.setHealth(fighterB.getMaxHealth());
         }
 
-
+        return result;
     }
     public boolean criticalHitRoll() {
         //get a true or false for critical hit with 10% chance to be true

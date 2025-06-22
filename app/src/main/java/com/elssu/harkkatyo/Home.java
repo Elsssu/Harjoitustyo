@@ -13,12 +13,11 @@ public class Home extends LutemonLocation {
         Storage.getInstance().addLutemon(lutemon);
         addLutemon(lutemon);
     }
-    public void regainHealth () {
-        for(Lutemon l : lutemons.values()) {
-            l.setHealth(l.getMaxHealth());
-        }
-
+    public void addLutemon(Lutemon lutemon) {
+        lutemon.setHealth(lutemon.getMaxHealth()); // Heal the Lutemon
+        super.addLutemon(lutemon); // Add to Home
     }
+
 
 
 }

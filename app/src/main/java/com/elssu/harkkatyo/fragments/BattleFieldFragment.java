@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.elssu.harkkatyo.Storage;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class BattleFieldFragment extends Fragment {
@@ -62,18 +64,53 @@ public class BattleFieldFragment extends Fragment {
             fighterB = battlefieldLutemons.next();
         }
 
+        fightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call fight and get results
+
+                List<String> fightResults = Storage.getInstance().getBattleField().fight("");
+                battleText.setText("");
+                Handler handler = new Handler();
+                int delay = 4000; // 4 seconds
+
+                for (int i = 0; i < fightResults.size(); i++) {
+                    final int index = i;
+                    handler.postDelayed(() -> {
+                        battleText.append(fightResults.get(index));
+                        updateBattleAreaVisuals(
+                                fighterA, fighterANameText, fighterAText, fighterAImage,
+                                fighterB, fighterBNameText, fighterBText, fighterBImage
+                        );
+                        // After the last log entry, handle defeat and healing
+                        if (index == fightResults.size() - 1) {
+                            handler.postDelayed(() -> {
+                                if (fighterA.getHealth() <= 0) {
+                                    Storage.getInstance().getBattleField().getLutemon(fighterA.getId());
+                                    Storage.getInstance().getHome().addLutemon(fighterA);
+                                    battleText.append(fighterA.getName() + " was brought home to heal.\n");
+                                } else if (fighterB.getHealth() <= 0) {
+                                    Storage.getInstance().getBattleField().getLutemon(fighterB.getId());
+                                    Storage.getInstance().getHome().addLutemon(fighterB);
+                                    battleText.append(fighterB.getName() + " was brought home to heal.\n");
+                                }
+                                updateBattleAreaVisuals(
+                                    fighterA, fighterANameText, fighterAText, fighterAImage,
+                                    fighterB, fighterBNameText, fighterBText, fighterBImage
+                                );
+                            }, delay); // Add a final delay for the healing message
+                        }
+                    }, delay * i);
+                }
+            }
+        });
         moveHomeFromBattleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collection<Lutemon> lutemons = Storage.getInstance().getBattleField().listLutemons();
-                if (!lutemons.isEmpty()) {
-                    Lutemon lutemon = lutemons.iterator().next();
-
-                    // Remove from Training Area and add to Home
-                    Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(lutemon.getId()));
-
-
-
+                for (Lutemon lutemon : Storage.getInstance().getBattleField().listLutemons()) {
+                    Storage.getInstance().getHome().addLutemon(
+                            Storage.getInstance().getBattleField().getLutemon(lutemon.getId())
+                    );
                 }
 
                 updateBattleAreaVisuals( fighterA,  fighterANameText,  fighterAText,  fighterAImage,
@@ -89,7 +126,7 @@ public class BattleFieldFragment extends Fragment {
             Lutemon fighterB, TextView fighterBNameText, TextView fighterBText, ImageView fighterBImage) {
 
         Collection<Lutemon> lutemons = Storage.getInstance().getBattleField().listLutemons();
-        if (lutemons.isEmpty()) {
+        if (lutemons.isEmpty() || fighterA == null) {
             fighterAText.setText("Nobody here :/");
             fighterANameText.setText("");
             fighterAImage.setImageDrawable(null);
