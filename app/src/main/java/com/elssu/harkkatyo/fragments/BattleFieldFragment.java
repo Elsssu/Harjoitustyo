@@ -29,14 +29,19 @@ public class BattleFieldFragment extends Fragment {
 
         TextView fighterAText = view.findViewById(R.id.FighterAText);
         TextView fighterBText = view.findViewById(R.id.FighterBText);
+
         TextView battleTextView = view.findViewById(R.id.BattleTextView);
         ScrollView battleScrollView = view.findViewById(R.id.BattleText);
+
         TextView fighterANameText = view.findViewById(R.id.FighterANameText);
         TextView fighterBNameText = view.findViewById(R.id.FighterBNameText);
+
         ImageView fighterAImage = view.findViewById(R.id.FighterAImage);
         ImageView fighterBImage = view.findViewById(R.id.FighterBImage);
+
         ImageView SwordAtoB = view.findViewById(R.id.SwordAtoB);
         ImageView SwordBtoA = view.findViewById(R.id.SwordBtoA);
+
         ImageView ShieldAtoB = view.findViewById(R.id.ShieldAtoB);
         ImageView ShieldBtoA = view.findViewById(R.id.ShieldBtoA);
 
@@ -82,8 +87,10 @@ public class BattleFieldFragment extends Fragment {
                 while (localHealthA > 0 && localHealthB > 0) {
 
                     int attackValueA = fighterA.getAttack() + fighterA.getExperience() / 2;
+
                     boolean missA = Math.random() < 0.2;
                     boolean critA = !missA && Math.random() < 0.45;
+
                     int damageA = attackValueA - fighterB.getDefense();
                     if (missA) {
                         fightResults.add("A_MISS");
@@ -102,6 +109,7 @@ public class BattleFieldFragment extends Fragment {
                             SwordAtoB.setVisibility(View.VISIBLE);
                             ShieldBtoA.setVisibility(View.VISIBLE);
                         });
+
                         localHealthB -= Math.max(0, damageA);
                         if (localHealthB < 0) localHealthB = 0;
                         if (localHealthB == 0) {
@@ -118,6 +126,7 @@ public class BattleFieldFragment extends Fragment {
                     int attackValueB = fighterB.getAttack() + fighterB.getExperience() / 2;
                     boolean missB = Math.random() < 0.2;
                     boolean critB = !missB && Math.random() < 0.45;
+
                     int damageB = attackValueB - fighterA.getDefense();
                     if (missB) {
                         fightResults.add("B_MISS");
@@ -132,6 +141,7 @@ public class BattleFieldFragment extends Fragment {
                         } else {
                             fightResults.add("B_HIT_" + Math.max(0, damageB));
                         }
+
                         visuals.add(() -> {
                             SwordBtoA.setVisibility(View.VISIBLE);
                             ShieldAtoB.setVisibility(View.VISIBLE);
@@ -156,6 +166,7 @@ public class BattleFieldFragment extends Fragment {
 
                 for (int i = 0; i < fightResults.size(); i++) {
                     final int idx = i;
+
                     handler.postDelayed(() -> {
                         SwordAtoB.setVisibility(View.GONE);
                         SwordBtoA.setVisibility(View.GONE);
@@ -170,11 +181,13 @@ public class BattleFieldFragment extends Fragment {
                         if (res.startsWith("A_")) {
                             if (res.equals("A_MISS")) {
                                 displayText = fighterA.getName() + " missed the attack!\n";
+
                             } else if (res.startsWith("A_CRIT_")) {
                                 int dmg = Integer.parseInt(res.substring(7));
                                 localB[0] -= dmg;
                                 if (localB[0] < 0) localB[0] = 0;
                                 displayText = fighterA.getName() + " landed a critical hit, dealing " + dmg + " damage to " + fighterB.getName() + "!\n";
+
                             } else if (res.startsWith("A_HIT_")) {
                                 int dmg = Integer.parseInt(res.substring(6));
                                 localB[0] -= dmg;
@@ -191,6 +204,7 @@ public class BattleFieldFragment extends Fragment {
                                 localA[0] -= dmg;
                                 if (localA[0] < 0) localA[0] = 0;
                                 displayText = fighterB.getName() + " landed a critical hit, dealing " + dmg + " damage to " + fighterA.getName() + "!\n";
+
                             } else if (res.startsWith("B_HIT_")) {
                                 int dmg = Integer.parseInt(res.substring(6));
                                 localA[0] -= dmg;
@@ -205,6 +219,7 @@ public class BattleFieldFragment extends Fragment {
                                 fighterA, fighterANameText, fighterAText, fighterAImage, localA[0], fighterA.getMaxHealth(),
                                 fighterB, fighterBNameText, fighterBText, fighterBImage, localB[0], fighterB.getMaxHealth()
                         );
+
                         battleTextView.append(displayText);
                         battleScrollView.post(() -> battleScrollView.fullScroll(View.FOCUS_DOWN));
 
@@ -264,11 +279,12 @@ public class BattleFieldFragment extends Fragment {
         if (view != null) {
             TextView fighterANameText = view.findViewById(R.id.FighterANameText);
             TextView fighterAText = view.findViewById(R.id.FighterAText);
-            ImageView fighterAImage = view.findViewById(R.id.FighterAImage);
+            TextView battleTextView = view.findViewById(R.id.BattleTextView);
             TextView fighterBNameText = view.findViewById(R.id.FighterBNameText);
             TextView fighterBText = view.findViewById(R.id.FighterBText);
             ImageView fighterBImage = view.findViewById(R.id.FighterBImage);
-            TextView battleTextView = view.findViewById(R.id.BattleTextView);
+            ImageView fighterAImage = view.findViewById(R.id.FighterAImage);
+
 
 
             battleTextView.setText("");
