@@ -14,6 +14,7 @@ public abstract class Lutemon {
     protected int losses;
     protected int wins;
     protected String color;
+    protected int  timesTraining;
 
     public Lutemon(String name, int attack, int defense, int maxHealth, String color){
         this.id = idCounter++;
@@ -26,6 +27,7 @@ public abstract class Lutemon {
         this.losses = 0;
         this.wins = 0;
         this.color = color;
+        this.timesTraining = 0;
 
     }
 
@@ -45,7 +47,9 @@ public abstract class Lutemon {
     public String getColor(){
         return color;
     }
-
+    public void addTimesTraining(int timesTraining) {
+        this.timesTraining += timesTraining;
+    }
     public void setIdCounter(int newIdCounter){
         idCounter = newIdCounter;
     }
@@ -54,12 +58,12 @@ public abstract class Lutemon {
         this.name = name;
     }
 
-    public void setLosses(int losses) {
-        this.losses = losses;
+    public void addLoss() {
+        losses++;
     }
 
-    public void setWins(int wins) {
-        this.wins = wins;
+    public void addWin() {
+        wins++;
     }
 
     public void addExperience(int experience) {

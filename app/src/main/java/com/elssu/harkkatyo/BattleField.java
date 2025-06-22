@@ -23,57 +23,47 @@ public class BattleField extends LutemonLocation {
         Lutemon fighterA = iterator.next();
         Lutemon fighterB = iterator.next();
         List<String> result = new ArrayList<>();
-        while ( fighterA.getHealth() > 0 && fighterB.getHealth() > 0) {
+        while (fighterA.getHealth() > 0 && fighterB.getHealth() > 0) {
+            // Fighter A attacks B
             int crit = 0;
-            //Check if attack misses or is a critical hit
-            //If attack hits then A attack B with possible added critical hit damage
-            int dmgtaken = fighterB.getDefense() - fighterA.attack + crit + fighterA.experience / 2;
-            if(missRoll()) {
+            int attackValue = fighterA.getAttack() + fighterA.getExperience() / 2;
+            if (missRoll()) {
                 result.add(fighterA.getName() + " missed the attack!\n");
-            }else {
+            } else {
                 if (criticalHitRoll()) {
                     crit = 3;
-                    fighterB.defense(fighterA.attack + crit + fighterA.experience / 2);
-                    result.add(fighterA.getName() + " landed a critical hit, dealing " + (dmgtaken + crit) + " damage to " + fighterB.getName() + "!\n");
-
-
-                }else {
-                    fighterB.defense(fighterA.attack + crit + fighterA.experience / 2);
-                    result.add(fighterA.getName() + " attacked " + fighterB.getName() + " for " + dmgtaken + " damage!\n");
+                    attackValue += crit;
+                    result.add(fighterA.getName() + " landed a critical hit, dealing " + (attackValue - fighterB.getDefense()) + " damage to " + fighterB.getName() + "!\n");
+                } else {
+                    result.add(fighterA.getName() + " attacked " + fighterB.getName() + " for " + (attackValue - fighterB.getDefense()) + " damage!\n");
                 }
-                //check if fighterB is able to fight
-                if (fighterB.getId() <= 0) {
-
+                fighterB.defense(attackValue);
+                if (fighterB.getHealth() <= 0) {
+                    result.add(fighterB.getName() + " has been defeated!\n");
                     break;
                 }
             }
-            crit = 0;
-            dmgtaken = fighterA.getDefense() - fighterB.attack + crit + fighterB.experience / 2;
 
-            if(missRoll()) {
+            // Fighter B attacks A
+            crit = 0;
+            attackValue = fighterB.getAttack() + fighterB.getExperience() / 2;
+            if (missRoll()) {
                 result.add(fighterB.getName() + " missed the attack!\n");
-            }else {
+            } else {
                 if (criticalHitRoll()) {
                     crit = 3;
-                    fighterA.defense(fighterB.attack + crit + fighterB.experience / 2);
-                    result.add(fighterB.getName() + " landed a critical hit, dealing " + (dmgtaken + crit) + " damage to " + fighterA.getName() + "!\n");
-
-                }else {
-                    fighterA.defense(fighterB.attack + crit + fighterA.experience / 2);
-                    result.add(fighterB.getName() + " landed a critical hit, dealing " + (dmgtaken + crit) + " damage to " + fighterA.getName() + "!\n");
-
-                    fighterA.defense(fighterB.attack + crit + fighterB.experience / 2);
+                    attackValue += crit;
+                    result.add(fighterB.getName() + " landed a critical hit, dealing " + (attackValue - fighterA.getDefense()) + " damage to " + fighterA.getName() + "!\n");
+                } else {
+                    result.add(fighterB.getName() + " attacked " + fighterA.getName() + " for " + (attackValue - fighterA.getDefense()) + " damage!\n");
                 }
-                //check if fighterB is able to fight
-                if (fighterA.getId() <= 0) {
+                fighterA.defense(attackValue);
+                if (fighterA.getHealth() <= 0) {
                     result.add(fighterA.getName() + " has been defeated!\n");
                     break;
                 }
             }
-            fighterA.setHealth(fighterA.getMaxHealth());
-            fighterB.setHealth(fighterB.getMaxHealth());
         }
-
         return result;
     }
     public boolean criticalHitRoll() {

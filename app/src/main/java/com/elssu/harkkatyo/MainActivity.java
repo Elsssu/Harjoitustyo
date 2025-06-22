@@ -1,6 +1,8 @@
 package com.elssu.harkkatyo;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.elssu.harkkatyo.fragments.HomeFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
 
 }

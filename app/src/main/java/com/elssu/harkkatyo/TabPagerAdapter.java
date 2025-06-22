@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.elssu.harkkatyo.fragments.BattleFieldFragment;
 import com.elssu.harkkatyo.fragments.HomeFragment;
+import com.elssu.harkkatyo.fragments.StatisticsSaveLoad;
 import com.elssu.harkkatyo.fragments.TrainingAreaFragment;
 
 public class TabPagerAdapter extends FragmentStateAdapter {
@@ -24,6 +25,8 @@ public class TabPagerAdapter extends FragmentStateAdapter {
                 return new TrainingAreaFragment();
             case 2:
                 return new BattleFieldFragment();
+            case 3:
+                return new StatisticsSaveLoad();
             default:
                 return new HomeFragment();
         }
@@ -32,6 +35,6 @@ public class TabPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }

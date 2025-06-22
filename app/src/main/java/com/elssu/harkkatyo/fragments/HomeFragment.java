@@ -1,5 +1,6 @@
 package com.elssu.harkkatyo.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.elssu.harkkatyo.Green;
 import com.elssu.harkkatyo.Lutemon;
 import com.elssu.harkkatyo.LutemonListAdapter;
 import com.elssu.harkkatyo.LutemonLocation;
+import com.elssu.harkkatyo.MainActivity;
 import com.elssu.harkkatyo.Orange;
 import com.elssu.harkkatyo.Pink;
 import com.elssu.harkkatyo.R;
@@ -154,9 +156,9 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+
             confirm.setOnClickListener(rg -> {
-                int selectedId;
-                selectedId = typeRadioGroup.getCheckedRadioButtonId();
+                int selectedId = typeRadioGroup.getCheckedRadioButtonId();
                 String enteredName = nameText.getText().toString();
 
                 if (selectedId == -1) {
@@ -168,8 +170,39 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                Lutemon newLutemon;
+                boolean nameExists = false;
+                // Check Home
+                for (Lutemon l : Storage.getInstance().getHome().listLutemons()) {
+                    if (l.getName().equalsIgnoreCase(enteredName)) {
+                        nameExists = true;
+                        break;
+                    }
+                }
+                // Check TrainingArea
+                if (!nameExists) {
+                    for (Lutemon l : Storage.getInstance().getTrainingArea().listLutemons()) {
+                        if (l.getName().equalsIgnoreCase(enteredName)) {
+                            nameExists = true;
+                            break;
+                        }
+                    }
+                }
+                // Check BattleField
+                if (!nameExists) {
+                    for (Lutemon l : Storage.getInstance().getBattleField().listLutemons()) {
+                        if (l.getName().equalsIgnoreCase(enteredName)) {
+                            nameExists = true;
+                            break;
+                        }
+                    }
+                }
 
+                if (nameExists) {
+                    statText.setText("A Lutemon with this name already exists!");
+                    return;
+                }
+
+                Lutemon newLutemon;
                 if (selectedId == R.id.orangeRB) {
                     newLutemon = new Orange(enteredName);
                 } else if (selectedId == R.id.blackRB) {
@@ -182,18 +215,12 @@ public class HomeFragment extends Fragment {
                     newLutemon = new Pink(enteredName);
                 }
 
-
                 Storage.getInstance().getHome().addLutemon(newLutemon);
 
                 lutemons.clear();
                 lutemons.addAll(Storage.getInstance().getHome().listLutemons());
                 lutemonListAdapter.notifyDataSetChanged();
 
-                ArrayList<Lutemon> list = Storage.getInstance().getAllLutemon();
-                Log.d("HomeFragmenterrory", "Lutemon list size=" + list.size());
-                for (Lutemon l : list) {
-                    Log.d("HomeFragmenterrory", "  ▶ " + l.getName() + " / " + l.getColor());
-                }
                 dialog.dismiss();
             });
             dialog .show();
@@ -204,7 +231,7 @@ public class HomeFragment extends Fragment {
         Button moveButton = view.findViewById(R.id.MoveButton);
         moveButton.setOnClickListener(v -> {
             if(lutemons.size() == 0) {
-                Toast.makeText(requireContext(), "You don't have any Lutemons yet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "You don't have any lutemons home", Toast.LENGTH_SHORT).show();
                 return;
             }
             BottomSheetDialog dialog = new BottomSheetDialog(requireContext());

@@ -10,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.elssu.harkkatyo.Lutemon;
 import com.elssu.harkkatyo.R;
 import com.elssu.harkkatyo.Storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -44,9 +46,14 @@ public class BattleFieldFragment extends Fragment {
 
         TextView fighterAText = view.findViewById(R.id.FighterAText);
         TextView fighterBText = view.findViewById(R.id.FighterBText);
-        TextView battleText = view.findViewById(R.id.BattleText);
+        TextView battleTextView = view.findViewById(R.id.BattleTextView);
+        ScrollView battleText = view.findViewById(R.id.BattleText);
         TextView fighterANameText = view.findViewById(R.id.FighterANameText);
         TextView fighterBNameText = view.findViewById(R.id.FighterBNameText);
+        ImageView SwordAtoB = view.findViewById(R.id.SwordAtoB);
+        ImageView SwordBtoA = view.findViewById(R.id.SwordBtoA);
+        ImageView ShieldAtoB = view.findViewById(R.id.ShieldAtoB);
+        ImageView ShieldBtoA = view.findViewById(R.id.ShieldBtoA);
 
         ImageView fighterAImage = view.findViewById(R.id.FighterAImage);
         ImageView fighterBImage = view.findViewById(R.id.FighterBImage);
@@ -64,57 +71,115 @@ public class BattleFieldFragment extends Fragment {
             fighterB = battlefieldLutemons.next();
         }
 
+
         fightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Call fight and get results
+                // Re-fetch fighters in case the battlefield has changed
+                Iterator<Lutemon> battlefieldLutemons = Storage.getInstance().getBattleField().listLutemons().iterator();
+                fighterA = battlefieldLutemons.hasNext() ? battlefieldLutemons.next() : null;
+                fighterB = battlefieldLutemons.hasNext() ? battlefieldLutemons.next() : null;
 
+                if (fighterA == null || fighterB == null) {
+                    battleTextView.setText("Not enough fighters on the battlefield!");
+                    return;
+                }
+                if (fighterA.getId() == fighterB.getId()) {
+                    battleTextView.setText("You need two different Lutemons on the battlefield!");
+                    return;
+                }
                 List<String> fightResults = Storage.getInstance().getBattleField().fight("");
-                battleText.setText("");
+                battleTextView.setText("");
                 Handler handler = new Handler();
-                int delay = 4000; // 4 seconds
+                int delay = 3000; // 3 seconds per step
 
                 for (int i = 0; i < fightResults.size(); i++) {
                     final int index = i;
                     handler.postDelayed(() -> {
-                        battleText.append(fightResults.get(index));
-                        updateBattleAreaVisuals(
-                                fighterA, fighterANameText, fighterAText, fighterAImage,
-                                fighterB, fighterBNameText, fighterBText, fighterBImage
-                        );
-                        // After the last log entry, handle defeat and healing
+                        // Hide all images first
+                        SwordAtoB.setVisibility(View.GONE);
+                        SwordBtoA.setVisibility(View.GONE);
+                        ShieldAtoB.setVisibility(View.GONE);
+                        ShieldBtoA.setVisibility(View.GONE);
+
+                        String result = fightResults.get(index);
+
+                        // Show the correct image based on the result text
+                        if (result.contains("missed")) {
+                            // Show nothing
+                        } else if (result.contains("landed a critical hit") || result.contains("attacked")) {
+                            if (result.startsWith(fighterA.getName())) {
+                                SwordAtoB.setVisibility(View.VISIBLE);
+                                ShieldBtoA.setVisibility(View.VISIBLE); // Fighter B defends
+                            } else if (result.startsWith(fighterB.getName())) {
+                                SwordBtoA.setVisibility(View.VISIBLE);
+                                ShieldAtoB.setVisibility(View.VISIBLE); // Fighter A defends
+                            }
+                        } else if (result.contains("defend") || result.contains("damage to")) {
+                            if (result.contains(fighterA.getName())) {
+                                ShieldAtoB.setVisibility(View.VISIBLE);
+                            } else if (result.contains(fighterB.getName())) {
+                                ShieldBtoA.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        battleTextView.append(result);
+
+                        // Hide the image after 1 second
+                        handler.postDelayed(() -> {
+                            SwordAtoB.setVisibility(View.GONE);
+                            SwordBtoA.setVisibility(View.GONE);
+                            ShieldAtoB.setVisibility(View.GONE);
+                            ShieldBtoA.setVisibility(View.GONE);
+                        }, 1000);
+
+                        // End of fight logic
                         if (index == fightResults.size() - 1) {
                             handler.postDelayed(() -> {
                                 if (fighterA.getHealth() <= 0) {
-                                    Storage.getInstance().getBattleField().getLutemon(fighterA.getId());
-                                    Storage.getInstance().getHome().addLutemon(fighterA);
-                                    battleText.append(fighterA.getName() + " was brought home to heal.\n");
+                                    fighterA.addLoss();
+                                    fighterB.addWin();
+                                    Lutemon removedB = Storage.getInstance().getBattleField().getLutemon(fighterB.getId());
+                                    Storage.getInstance().getHome().addLutemon(removedB);
+                                    Lutemon removedA = Storage.getInstance().getBattleField().getLutemon(fighterA.getId());
+                                    Storage.getInstance().getHome().addLutemon(removedA);
+
+                                    battleTextView.append(fighterB.getName() + " and " + fighterA.getName() + " were brought home to heal.\n");
                                 } else if (fighterB.getHealth() <= 0) {
-                                    Storage.getInstance().getBattleField().getLutemon(fighterB.getId());
-                                    Storage.getInstance().getHome().addLutemon(fighterB);
-                                    battleText.append(fighterB.getName() + " was brought home to heal.\n");
+                                    fighterB.addLoss();
+                                    fighterA.addWin();
+                                    Lutemon removedB = Storage.getInstance().getBattleField().getLutemon(fighterB.getId());
+                                    Storage.getInstance().getHome().addLutemon(removedB);
+                                    Lutemon removedA = Storage.getInstance().getBattleField().getLutemon(fighterA.getId());
+                                    Storage.getInstance().getHome().addLutemon(removedA);
+                                    battleTextView.append(fighterA.getName() + " and " + fighterB.getName() + " were brought home to heal.\n");
                                 }
+                                fighterA= null;
+                                fighterB= null;
                                 updateBattleAreaVisuals(
-                                    fighterA, fighterANameText, fighterAText, fighterAImage,
-                                    fighterB, fighterBNameText, fighterBText, fighterBImage
+                                        fighterA, fighterANameText, fighterAText, fighterAImage,
+                                        fighterB, fighterBNameText, fighterBText, fighterBImage
                                 );
-                            }, delay); // Add a final delay for the healing message
+                            }, delay);
                         }
                     }, delay * i);
                 }
             }
+
         });
         moveHomeFromBattleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (Lutemon lutemon : Storage.getInstance().getBattleField().listLutemons()) {
-                    Storage.getInstance().getHome().addLutemon(
-                            Storage.getInstance().getBattleField().getLutemon(lutemon.getId())
-                    );
+                for (Lutemon lutemon : new ArrayList<>(Storage.getInstance().getBattleField().listLutemons())) {
+                    Lutemon removedC = Storage.getInstance().getBattleField().getLutemon(lutemon.getId());
+                    if (removedC != null) {
+                        Storage.getInstance().getHome().addLutemon(removedC);
+                    }
                 }
+                fighterA = null;
+                fighterB = null;
+                updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage, fighterB, fighterBNameText, fighterBText, fighterBImage);
 
-                updateBattleAreaVisuals( fighterA,  fighterANameText,  fighterAText,  fighterAImage,
-                        fighterB,  fighterBNameText,  fighterBText,  fighterBImage);
             }
         });
         updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage, fighterB, fighterBNameText, fighterBText, fighterBImage);
