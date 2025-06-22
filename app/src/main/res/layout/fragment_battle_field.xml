@@ -12,19 +12,131 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="129dp"
-            android:layout_height="46dp"
+            android:id="@+id/BattleText"
+            android:layout_width="274dp"
+            android:layout_height="69dp"
             android:layout_gravity="center|center"
-            android:layout_marginTop="588dp"
-            android:text="Battle"
-            android:textSize="20sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.556"
+            app:layout_constraintHorizontal_bias="0.883"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Battle dialogue" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="254dp"
+            android:layout_height="167dp"
+            android:background="@android:color/holo_red_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.777"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.709">
+
+            <TextView
+                android:id="@+id/FighterBText"
+                android:layout_width="129dp"
+                android:layout_height="96dp"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toEndOf="@+id/FighterBImage"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.967"
+                tools:text="Lutemon stats" />
+
+            <ImageView
+                android:id="@+id/FighterBImage"
+                android:layout_width="109dp"
+                android:layout_height="126dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/FighterBNameText"
+                android:layout_width="124dp"
+                android:layout_height="48dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textColorHighlight="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.915"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.176" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="254dp"
+            android:layout_height="167dp"
+            android:background="@color/teal_bright"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.898"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.237">
+
+            <TextView
+                android:id="@+id/FighterAText"
+                android:layout_width="128dp"
+                android:layout_height="99dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/FighterAImage"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                tools:text="Lutemon stats" />
+
+            <ImageView
+                android:id="@+id/FighterAImage"
+                android:layout_width="110dp"
+                android:layout_height="138dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/FighterANameText"
+                android:layout_width="124dp"
+                android:layout_height="54dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.123"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.123" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/swipeInfoText"
+            android:id="@+id/ExperienceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
@@ -34,6 +146,28 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/FightStartButton"
+            android:layout_width="226dp"
+            android:layout_height="63dp"
+            android:text="Fight!"
+            app:layout_constraintBottom_toTopOf="@+id/ExperienceText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/MoveHomeFromBattleButton"
+            android:layout_width="96dp"
+            android:layout_height="101dp"
+            android:text="Move\none\nhome"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.012"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.916" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

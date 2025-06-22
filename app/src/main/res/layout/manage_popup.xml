@@ -76,10 +76,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:paddingStart="20dp"
+                android:paddingStart="10dp"
                 android:paddingEnd="0dp"
-                android:text="Pick where to move lutemon or delete it"
-                android:textSize="24sp" />
+                android:text="Pick where to move lutemon.\n\nAfter clicking confirm,\nselect your lutemon."
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
         </LinearLayout>
 

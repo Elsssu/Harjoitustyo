@@ -22,7 +22,7 @@ public abstract class Lutemon {
         this.defense = defense;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.experience = 20;
+        this.experience = 0;
         this.losses = 0;
         this.wins = 0;
         this.color = color;
@@ -34,6 +34,9 @@ public abstract class Lutemon {
     }
     public void defense(int dmg){
         health = health-(dmg-defense);
+        if(health < 0 ) {
+            this.health = 0;
+        }
     }
 
     public int getId(){

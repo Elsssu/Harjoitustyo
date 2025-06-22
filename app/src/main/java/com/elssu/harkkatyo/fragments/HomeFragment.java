@@ -69,6 +69,13 @@ public class HomeFragment extends Fragment {
 
     }
     @Override
+    public void onResume() {
+        super.onResume();
+        lutemons.clear();
+        lutemons.addAll(Storage.getInstance().getHome().listLutemons());
+        lutemonListAdapter.notifyDataSetChanged();
+    }
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -76,7 +83,7 @@ public class HomeFragment extends Fragment {
         view.setBackgroundResource(R.drawable.home_bg);
         Button lutemonsCreateMenuButton = view.findViewById(R.id.LutemonsCreateMenuButton);
 
-        lutemons = new ArrayList<>(Storage.getInstance().getAllLutemon());
+        lutemons = new ArrayList<>(Storage.getInstance().getHome().listLutemons());
         lutemonListAdapter = new LutemonListAdapter(lutemons);
 
         //AI Copilot helped me make this pop-up menu below
@@ -176,10 +183,10 @@ public class HomeFragment extends Fragment {
                 }
 
 
-                Storage.getInstance().addLutemon(newLutemon);
+                Storage.getInstance().getHome().addLutemon(newLutemon);
 
                 lutemons.clear();
-                lutemons.addAll(Storage.getInstance().getAllLutemon());
+                lutemons.addAll(Storage.getInstance().getHome().listLutemons());
                 lutemonListAdapter.notifyDataSetChanged();
 
                 ArrayList<Lutemon> list = Storage.getInstance().getAllLutemon();
@@ -188,12 +195,12 @@ public class HomeFragment extends Fragment {
                     Log.d("HomeFragmenterrory", "  ▶ " + l.getName() + " / " + l.getColor());
                 }
                 dialog.dismiss();
-            });lutemonListAdapter.showAllButtons();
+            });
             dialog .show();
 
 
         });
-        ArrayList<Lutemon> lutemons = Storage.getInstance().getAllLutemon();
+
         Button moveButton = view.findViewById(R.id.MoveButton);
         moveButton.setOnClickListener(v -> {
             if(lutemons.size() == 0) {
@@ -219,29 +226,30 @@ public class HomeFragment extends Fragment {
                     movStatText.setText("You haven't selected anything yeat");
                     return;
                 }
-                String choice;
+                int choice;
 
                 if (selectedId == R.id.trainingAreaRB) {
-                    if(Storage.getInstance().getTrainingArea().listLutemons() == null){
+                    if(!Storage.getInstance().getTrainingArea().listLutemons().isEmpty()){
+                        movStatText.setText("Training area is full, you need to make room first.");
+                        return;
+                    }else {
+                        choice = 1;
                     }
-
                 } else if (selectedId == R.id.battleFieldRB) {
-                    Storage.getInstance().getBattleField().addLutemon(lutemon);
+                    if (Storage.getInstance().getBattleField().listLutemons().size() > 1) {
+                        movStatText.setText("Battle field area is full, you need to make room first.");
+                        return;
+                    }else {
+                        choice = 2;
+                    }
                 } else if (selectedId == R.id.deleteRB) {
-
+                    choice = 3;
+                } else {
+                    choice = 0;
                 }
+
                 lutemonListAdapter.setRGChoice(choice);
-
-
-                lutemons.clear();
-                lutemons.addAll(Storage.getInstance().getAllLutemon());
-                lutemonListAdapter.notifyDataSetChanged();
-
-                ArrayList<Lutemon> list = Storage.getInstance().getAllLutemon();
-                Log.d("HomeFragmenterrory", "Lutemon list size=" + list.size());
-                for (Lutemon l : list) {
-                    Log.d("HomeFragmenterrory", "  ▶ " + l.getName() + " / " + l.getColor());
-                }
+                lutemonListAdapter.showSelectButtons();
                 dialog.dismiss();
             });
             dialog .show();

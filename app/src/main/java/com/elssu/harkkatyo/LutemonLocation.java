@@ -7,30 +7,21 @@ import java.util.HashMap;
 public abstract class LutemonLocation {
     protected final String name;
 
-    protected HashMap<Integer, Lutemon> lutemonLocations = new HashMap<>();
+    protected HashMap<Integer, Lutemon> lutemons = new HashMap<>();
 
     public LutemonLocation(String name) {
         this.name = name;
     }
 
     public void addLutemon(Lutemon lutemon){
-            lutemonLocations.put(lutemon.getId(), lutemon);
+            lutemons.put(lutemon.getId(), lutemon);
     }
     public Lutemon getLutemon(int id){
-        return lutemonLocations.get(id);
+        Lutemon movingLutemon = lutemons.get(id);
+        lutemons.remove(id);
+        return movingLutemon;
     }
-    public Lutemon removeLutemon(int id) {
-        return lutemonLocations.remove(id);
-    }
-
     public Collection<Lutemon> listLutemons() {
-        return lutemonLocations.values();
-    }
-
-    public String getLocationName() {
-        return name;
-    }
-    public void removeLutemon(){
-        lutemonLocations.clear();
+        return lutemons.values();
     }
 }

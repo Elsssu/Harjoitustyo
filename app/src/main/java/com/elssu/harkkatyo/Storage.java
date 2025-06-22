@@ -30,20 +30,6 @@ public class Storage {
         ArrayList<Lutemon> list = new ArrayList<>(lutemons.values());
         return list;
     }
-    public void moveLutemon(int targetId, LutemonLocation from, LutemonLocation to) {
-        for (Iterator<Lutemon> it = from.listLutemons().iterator(); it.hasNext(); ) {
-            Lutemon l = it.next();
-            if (l.getId() == targetId) {
-                it.remove();
-                to.listLutemons().add(l);
-                break;
-            }
-        }
-    }
-    public void listLutemons(){
-
-    }
-
     public Home getHome() {
         return home;
     }

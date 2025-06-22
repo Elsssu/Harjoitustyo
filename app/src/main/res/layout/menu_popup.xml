@@ -85,6 +85,7 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="0dp"
                 android:text="Pick a type to see its starting stats"
+                android:textColor="@color/black"
                 android:textSize="34sp" />
         </LinearLayout>
 

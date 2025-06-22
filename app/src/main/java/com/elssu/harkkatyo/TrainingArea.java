@@ -1,27 +1,35 @@
 package com.elssu.harkkatyo;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class TrainingArea extends LutemonLocation {
-    private HashMap<Integer, Lutemon> lutemons = new HashMap<>();
 
+    private int trainCounter = 0;
+    private static final int trainThreshold = 20;
     public TrainingArea() {
         super("TrainingArea");
     }
 
-    private Lutemon currentLutemon;
+    public void addLutemon(Lutemon lutemon) {
+        lutemons.put(lutemon.getId(), lutemon);
 
-    public Lutemon getCurrentLutemon() {
-        return currentLutemon;
     }
 
-    public void setCurrentLutemon(Lutemon lutemon) {
-        this.currentLutemon = lutemon;
+    public int getTrainCounter() {
+        return trainCounter;
+    }
+    public int getTrainThreshold() {
+        return trainThreshold;
     }
 
     public void train() {
-        Lutemon lutemon = lutemonLocations.get(0);
-
-
+        Collection<Lutemon> lutemonList = lutemons.values();
+        Lutemon lutemon = lutemonList.iterator().next();
+        trainCounter += 1;
+         if(!(trainCounter < trainThreshold)) {
+             lutemon.addExperience(1);
+             trainCounter = 0;
+         }
     }
 }

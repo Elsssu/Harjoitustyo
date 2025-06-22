@@ -14,10 +14,11 @@ public class Home extends LutemonLocation {
         addLutemon(lutemon);
     }
     public void regainHealth () {
-        for(Lutemon l : lutemonLocations.values()) {
+        for(Lutemon l : lutemons.values()) {
             l.setHealth(l.getMaxHealth());
         }
 
     }
+
 
 }

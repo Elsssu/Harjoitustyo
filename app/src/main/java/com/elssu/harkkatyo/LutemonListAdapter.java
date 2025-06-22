@@ -22,24 +22,23 @@ public class LutemonListAdapter extends RecyclerView.Adapter<LutemonViewHolder> 
 
     private ArrayList<Lutemon> lutemons;
 
+    private boolean showButtons = true;
 
-
-    private String rGChoice;
+    private int Choice;
     public LutemonListAdapter(ArrayList<Lutemon> lutemons) {
+
         this.lutemons = lutemons;
     }
 
-    public void showAllButtons() {
-        showButtons = true;
+    public void showSelectButtons() {
+        showButtons = false;
         notifyDataSetChanged();
     }
-    public void setrGChoice(String rGChoice) {
-        this.rGChoice = rGChoice;
+    public void setRGChoice(int Choice) {
+        this.Choice = Choice;
     }
 
-    public void setRGChoice(String choice) {
 
-    }
 
     @NonNull
     @Override
@@ -47,7 +46,7 @@ public class LutemonListAdapter extends RecyclerView.Adapter<LutemonViewHolder> 
         View lutemonView = LayoutInflater.from(parent.getContext()).inflate(R.layout.lutemon_view, parent, false);
         return new LutemonViewHolder(lutemonView);
     }
-    private boolean showButtons = true;
+
     @Override
     public void onBindViewHolder(@NonNull LutemonViewHolder holder, int position) {
 
@@ -61,18 +60,36 @@ public class LutemonListAdapter extends RecyclerView.Adapter<LutemonViewHolder> 
         holder.lutemonWins.setText("Wins: " + (String.valueOf(lutemons.get(position).getWins())));
         holder.lutemonLosses.setText("Losses: " + (String.valueOf(lutemons.get(position).getLosses())));
 
-        holder.selectLutemon.setVisibility(showButtons? View.VISIBLE : View.GONE);
+        holder.selectLutemon.setVisibility(showButtons? View.GONE : View.VISIBLE);
         holder.selectLutemon.setOnClickListener(new View.OnClickListener() {
 
 
             @Override
             public void onClick(View v) {
                 //get chosen lutemon and set all select buttons to GONE
-                boolean showButtons = false;
+
                  int pos = holder.getAdapterPosition();
+                 Lutemon selectedLutemon = lutemons.get(pos);
+                 int lutemonId = selectedLutemon.getId();
 
                 notifyItemRangeChanged(0, getItemCount());
-                Storage.getInstance().getHome().getLutemon(pos);
+                switch(Choice) {
+                    case 1:
+                        Storage.getInstance().getTrainingArea().addLutemon(Storage.getInstance().getHome().getLutemon(lutemonId));
+                        break;
+                    case 2:
+                        Storage.getInstance().getBattleField().addLutemon(Storage.getInstance().getHome().getLutemon(lutemonId));
+                        break;
+                    case 3:
+                        Storage.getInstance().getHome().getLutemon(lutemonId);
+                        break;
+                    case 0:
+                        return;
+                }
+                lutemons.clear();
+                lutemons.addAll(Storage.getInstance().getHome().listLutemons());
+                showButtons = true; // <-- should be true, not false
+                notifyDataSetChanged();
             }
         });
 
