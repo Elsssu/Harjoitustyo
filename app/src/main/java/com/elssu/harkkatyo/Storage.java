@@ -64,7 +64,7 @@ public class Storage {
         try (ObjectInputStream ois = new ObjectInputStream(context.openFileInput(filename))) {
             HashMap<Integer, Lutemon> loadedLutemons = (HashMap<Integer, Lutemon>) ois.readObject();
 
-            // Print loaded Lutemon names to Toast
+
             StringBuilder names = new StringBuilder();
             for (Lutemon l : loadedLutemons.values()) {
                 names.append(l.getName()).append(", ");

@@ -38,12 +38,16 @@ public class BattleFieldFragment extends Fragment {
         ImageView ShieldAtoB = view.findViewById(R.id.ShieldAtoB);
         ImageView ShieldBtoA = view.findViewById(R.id.ShieldBtoA);
 
+        updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage,
+                fighterB, fighterBNameText, fighterBText, fighterBImage);
+
         Button fightButton = view.findViewById(R.id.FightStartButton);
         Button moveHomeFromBattleButton = view.findViewById(R.id.MoveHomeFromBattleButton);
 
         Iterator<Lutemon> battlefieldLutemons = Storage.getInstance().getBattleField().listLutemons().iterator();
         if (battlefieldLutemons.hasNext()) fighterA = battlefieldLutemons.next();
         if (battlefieldLutemons.hasNext()) fighterB = battlefieldLutemons.next();
+
 
         fightButton.setOnClickListener(v -> {
             Iterator<Lutemon> it = Storage.getInstance().getBattleField().listLutemons().iterator();
@@ -59,144 +63,177 @@ public class BattleFieldFragment extends Fragment {
                 return;
             }
 
-            int localHealthA = fighterA.getHealth();
-            int localHealthB = fighterB.getHealth();
+            Handler handler = new Handler();
+            battleTextView.setText("3");
+            handler.postDelayed(() -> battleTextView.setText("2"), 1000);
+            handler.postDelayed(() -> battleTextView.setText("1"), 2000);
+            handler.postDelayed(() -> battleTextView.setText("Fight!"), 3000);
 
-            List<String> fightResults = new ArrayList<>();
-            List<Runnable> visuals = new ArrayList<>();
+            handler.postDelayed(() -> {
+                int localHealthA = fighterA.getHealth();
+                int localHealthB = fighterB.getHealth();
 
-            while (localHealthA > 0 && localHealthB > 0) {
-                int attackValueA = fighterA.getAttack() + fighterA.getExperience() / 2;
-                boolean missA = Math.random() < 0.2;
-                boolean critA = !missA && Math.random() < 0.45;
-                int damageA = attackValueA - fighterB.getDefense();
-                if (missA) {
-                    fightResults.add(fighterA.getName() + " missed the attack!\n");
-                    visuals.add(() -> {
-                        SwordAtoB.setVisibility(View.GONE);
-                        ShieldBtoA.setVisibility(View.GONE);
-                    });
-                } else {
-                    if (critA) {
-                        damageA += 2;
-                        fightResults.add(fighterA.getName() + " landed a critical hit, dealing " + Math.max(0, damageA) + " damage to " + fighterB.getName() + "!\n");
-                    } else {
-                        fightResults.add(fighterA.getName() + " attacked " + fighterB.getName() + " for " + Math.max(0, damageA) + " damage!\n");
-                    }
-                    visuals.add(() -> {
-                        SwordAtoB.setVisibility(View.VISIBLE);
-                        ShieldBtoA.setVisibility(View.VISIBLE);
-                    });
-                    localHealthB -= Math.max(0, damageA);
-                    if (localHealthB < 0) localHealthB = 0;
-                    if (localHealthB == 0) {
-                        fightResults.add(fighterB.getName() + " has been defeated!\n");
+                List<String> fightResults = new ArrayList<>();
+                List<Runnable> visuals = new ArrayList<>();
+
+                // Simulate the fight and collect results
+                while (localHealthA > 0 && localHealthB > 0) {
+                    // Fighter A attacks B
+                    int attackValueA = fighterA.getAttack() + fighterA.getExperience() / 2;
+                    boolean missA = Math.random() < 0.2;
+                    boolean critA = !missA && Math.random() < 0.45;
+                    int damageA = attackValueA - fighterB.getDefense();
+                    if (missA) {
+                        fightResults.add("A_MISS");
                         visuals.add(() -> {
                             SwordAtoB.setVisibility(View.GONE);
                             ShieldBtoA.setVisibility(View.GONE);
                         });
-                        break;
-                    }
-                }
-
-                int attackValueB = fighterB.getAttack() + fighterB.getExperience() / 2;
-                boolean missB = Math.random() < 0.2;
-                boolean critB = !missB && Math.random() < 0.45;
-                int damageB = attackValueB - fighterA.getDefense();
-                if (missB) {
-                    fightResults.add(fighterB.getName() + " missed the attack!\n");
-                    visuals.add(() -> {
-                        SwordBtoA.setVisibility(View.GONE);
-                        ShieldAtoB.setVisibility(View.GONE);
-                    });
-                } else {
-                    if (critB) {
-                        damageB += 2;
-                        fightResults.add(fighterB.getName() + " landed a critical hit, dealing " + Math.max(0, damageB) + " damage to " + fighterA.getName() + "!\n");
                     } else {
-                        fightResults.add(fighterB.getName() + " attacked " + fighterA.getName() + " for " + Math.max(0, damageB) + " damage!\n");
+                        if (critA) {
+                            damageA += 2;
+                            fightResults.add("A_CRIT_" + Math.max(0, damageA));
+                        } else {
+                            fightResults.add("A_HIT_" + Math.max(0, damageA));
+                        }
+                        visuals.add(() -> {
+                            SwordAtoB.setVisibility(View.VISIBLE);
+                            ShieldBtoA.setVisibility(View.VISIBLE);
+                        });
+                        localHealthB -= Math.max(0, damageA);
+                        if (localHealthB < 0) localHealthB = 0;
+                        if (localHealthB == 0) {
+                            fightResults.add("B_DEFEATED");
+                            visuals.add(() -> {
+                                SwordAtoB.setVisibility(View.GONE);
+                                ShieldBtoA.setVisibility(View.GONE);
+                            });
+                            break;
+                        }
                     }
-                    visuals.add(() -> {
-                        SwordBtoA.setVisibility(View.VISIBLE);
-                        ShieldAtoB.setVisibility(View.VISIBLE);
-                    });
-                    localHealthA -= Math.max(0, damageB);
-                    if (localHealthA < 0) localHealthA = 0;
-                    if (localHealthA == 0) {
-                        fightResults.add(fighterA.getName() + " has been defeated!\n");
+
+                    // Fighter B attacks A
+                    int attackValueB = fighterB.getAttack() + fighterB.getExperience() / 2;
+                    boolean missB = Math.random() < 0.2;
+                    boolean critB = !missB && Math.random() < 0.45;
+                    int damageB = attackValueB - fighterA.getDefense();
+                    if (missB) {
+                        fightResults.add("B_MISS");
                         visuals.add(() -> {
                             SwordBtoA.setVisibility(View.GONE);
                             ShieldAtoB.setVisibility(View.GONE);
                         });
-                        break;
-                    }
-                }
-            }
-
-            Handler handler = new Handler();
-            battleTextView.setText("");
-            int[] healthA = {fighterA.getHealth()};
-            int[] healthB = {fighterB.getHealth()};
-            int[] localA = {fighterA.getHealth()};
-            int[] localB = {fighterB.getHealth()};
-            for (int i = 0; i < fightResults.size(); i++) {
-                final int idx = i;
-                handler.postDelayed(() -> {
-                    SwordAtoB.setVisibility(View.GONE);
-                    SwordBtoA.setVisibility(View.GONE);
-                    ShieldAtoB.setVisibility(View.GONE);
-                    ShieldBtoA.setVisibility(View.GONE);
-
-                    visuals.get(idx).run();
-
-                    String res = fightResults.get(idx);
-                    if (res.contains("attacked") || res.contains("landed a critical hit")) {
-                        int dmg = 0;
-                        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(dealing |for )(\\d+)").matcher(res);
-                        if (m.find()) dmg = Integer.parseInt(m.group(2));
-                        if (res.startsWith(fighterA.getName())) {
-                            localB[0] -= dmg;
-                            if (localB[0] < 0) localB[0] = 0;
-                        } else if (res.startsWith(fighterB.getName())) {
-                            localA[0] -= dmg;
-                            if (localA[0] < 0) localA[0] = 0;
+                    } else {
+                        if (critB) {
+                            damageB += 2;
+                            fightResults.add("B_CRIT_" + Math.max(0, damageB));
+                        } else {
+                            fightResults.add("B_HIT_" + Math.max(0, damageB));
+                        }
+                        visuals.add(() -> {
+                            SwordBtoA.setVisibility(View.VISIBLE);
+                            ShieldAtoB.setVisibility(View.VISIBLE);
+                        });
+                        localHealthA -= Math.max(0, damageB);
+                        if (localHealthA < 0) localHealthA = 0;
+                        if (localHealthA == 0) {
+                            fightResults.add("A_DEFEATED");
+                            visuals.add(() -> {
+                                SwordBtoA.setVisibility(View.GONE);
+                                ShieldAtoB.setVisibility(View.GONE);
+                            });
+                            break;
                         }
                     }
+                }
 
-                    updateBattleAreaVisualsWithLocalHealth(
-                            fighterA, fighterANameText, fighterAText, fighterAImage, localA[0], fighterA.getMaxHealth(),
-                            fighterB, fighterBNameText, fighterBText, fighterBImage, localB[0], fighterB.getMaxHealth()
-                    );
-                    battleTextView.append(res);
+                battleTextView.setText("");
+                int[] localA = {fighterA.getHealth()};
+                int[] localB = {fighterB.getHealth()};
+                int[] turn = {0}; // 0: A's turn, 1: B's turn
 
+                for (int i = 0; i < fightResults.size(); i++) {
+                    final int idx = i;
                     handler.postDelayed(() -> {
                         SwordAtoB.setVisibility(View.GONE);
                         SwordBtoA.setVisibility(View.GONE);
                         ShieldAtoB.setVisibility(View.GONE);
                         ShieldBtoA.setVisibility(View.GONE);
-                    }, 1000);
 
-                    if (idx == fightResults.size() - 1) {
-                        handler.postDelayed(() -> {
-                            fighterA.setHealth(localA[0]);
-                            fighterB.setHealth(localB[0]);
-                            if (localA[0] == 0) {
-                                fighterA.addLoss();
-                                fighterB.addWin();
-                            } else if (localB[0] == 0) {
-                                fighterB.addLoss();
-                                fighterA.addWin();
+                        visuals.get(idx).run();
+
+                        String res = fightResults.get(idx);
+                        String displayText = "";
+
+                        if (res.startsWith("A_")) {
+                            if (res.equals("A_MISS")) {
+                                displayText = fighterA.getName() + " missed the attack!\n";
+                            } else if (res.startsWith("A_CRIT_")) {
+                                int dmg = Integer.parseInt(res.substring(7));
+                                localB[0] -= dmg;
+                                if (localB[0] < 0) localB[0] = 0;
+                                displayText = fighterA.getName() + " landed a critical hit, dealing " + dmg + " damage to " + fighterB.getName() + "!\n";
+                            } else if (res.startsWith("A_HIT_")) {
+                                int dmg = Integer.parseInt(res.substring(6));
+                                localB[0] -= dmg;
+                                if (localB[0] < 0) localB[0] = 0;
+                                displayText = fighterA.getName() + " attacked " + fighterB.getName() + " for " + dmg + " damage!\n";
+                            } else if (res.equals("A_DEFEATED")) {
+                                displayText = fighterA.getName() + " has been defeated!\n";
                             }
-                            Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterA.getId()));
-                            Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterB.getId()));
-                            battleTextView.append("Both fighters were brought home to heal.\n");
-                            fighterA = null;
-                            fighterB = null;
-                            updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage, fighterB, fighterBNameText, fighterBText, fighterBImage);
-                        }, 2000);
-                    }
-                }, 2000 * idx);
-            }
+                        } else if (res.startsWith("B_")) {
+                            if (res.equals("B_MISS")) {
+                                displayText = fighterB.getName() + " missed the attack!\n";
+                            } else if (res.startsWith("B_CRIT_")) {
+                                int dmg = Integer.parseInt(res.substring(7));
+                                localA[0] -= dmg;
+                                if (localA[0] < 0) localA[0] = 0;
+                                displayText = fighterB.getName() + " landed a critical hit, dealing " + dmg + " damage to " + fighterA.getName() + "!\n";
+                            } else if (res.startsWith("B_HIT_")) {
+                                int dmg = Integer.parseInt(res.substring(6));
+                                localA[0] -= dmg;
+                                if (localA[0] < 0) localA[0] = 0;
+                                displayText = fighterB.getName() + " attacked " + fighterA.getName() + " for " + dmg + " damage!\n";
+                            } else if (res.equals("B_DEFEATED")) {
+                                displayText = fighterB.getName() + " has been defeated!\n";
+                            }
+                        }
+
+                        updateBattleAreaVisualsWithLocalHealth(
+                                fighterA, fighterANameText, fighterAText, fighterAImage, localA[0], fighterA.getMaxHealth(),
+                                fighterB, fighterBNameText, fighterBText, fighterBImage, localB[0], fighterB.getMaxHealth()
+                        );
+                        battleTextView.append(displayText);
+
+                        handler.postDelayed(() -> {
+                            SwordAtoB.setVisibility(View.GONE);
+                            SwordBtoA.setVisibility(View.GONE);
+                            ShieldAtoB.setVisibility(View.GONE);
+                            ShieldBtoA.setVisibility(View.GONE);
+                        }, 1000);
+
+                        if (idx == fightResults.size() - 1) {
+                            handler.postDelayed(() -> {
+                                fighterA.setHealth(localA[0]);
+                                fighterB.setHealth(localB[0]);
+                                if (localA[0] == 0) {
+                                    fighterA.addLoss();
+                                    fighterB.addWin();
+                                } else if (localB[0] == 0) {
+                                    fighterB.addLoss();
+                                    fighterA.addWin();
+                                }
+                                Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterA.getId()));
+                                Storage.getInstance().getHome().addLutemon(Storage.getInstance().getBattleField().getLutemon(fighterB.getId()));
+                                battleTextView.append("Both fighters were brought home to heal.\n");
+                                fighterA = null;
+                                fighterB = null;
+                                updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage, fighterB, fighterBNameText, fighterBText, fighterBImage);
+                            }, 2000);
+                        }
+                    }, 2000 * idx);
+                }
+            }, 4000);
         });
 
         moveHomeFromBattleButton.setOnClickListener(v -> {
@@ -213,6 +250,30 @@ public class BattleFieldFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Iterator<Lutemon> battlefieldLutemons = Storage.getInstance().getBattleField().listLutemons().iterator();
+        fighterA = battlefieldLutemons.hasNext() ? battlefieldLutemons.next() : null;
+        fighterB = battlefieldLutemons.hasNext() ? battlefieldLutemons.next() : null;
+
+        View view = getView();
+        if (view != null) {
+            TextView fighterANameText = view.findViewById(R.id.FighterANameText);
+            TextView fighterAText = view.findViewById(R.id.FighterAText);
+            ImageView fighterAImage = view.findViewById(R.id.FighterAImage);
+            TextView fighterBNameText = view.findViewById(R.id.FighterBNameText);
+            TextView fighterBText = view.findViewById(R.id.FighterBText);
+            ImageView fighterBImage = view.findViewById(R.id.FighterBImage);
+            TextView battleTextView = view.findViewById(R.id.BattleTextView);
+
+            // Clear the battle text
+            battleTextView.setText("");
+
+            updateBattleAreaVisuals(fighterA, fighterANameText, fighterAText, fighterAImage,
+                    fighterB, fighterBNameText, fighterBText, fighterBImage);
+        }
+    }
     private void updateBattleAreaVisuals(
             Lutemon fighterA, TextView fighterANameText, TextView fighterAText, ImageView fighterAImage,
             Lutemon fighterB, TextView fighterBNameText, TextView fighterBText, ImageView fighterBImage) {
